@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="content">
+    .score
+    <input type="text" name="name" id="name">
+    <input type="number" name="score" id="score">
+    <button id="save">save</button>
+  </div>
+  <script>
+    const nameEl = document.getElementById('name').value;
+    const scoreEl = document.getElementById('score').value;
+    const saveBtn = document.getElementById('save');
+
+    saveBtn.onclick = function () {
+      const score = {
+        "user": nameEl,
+        "score": scoreEl
+      };
+
+
+      const gameScores = fetch(
+        'https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/RZEeQ1sUjcLkB6e2nvpj/scores/', {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+          },
+          body: JSON.stringify(score),
+        });
+      
+      gameScores.then(response => response.json())
+      .then(result => console.log(result))
+    }
+
+    const myGame = {
+      name: "My awesome game",
+    };
+
+    const myNewGame = fetch('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+    });
+  </script>
+</body>
+
+</html>
