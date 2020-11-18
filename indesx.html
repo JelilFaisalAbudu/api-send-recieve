@@ -9,23 +9,24 @@
 
 <body>
   <div id="content">
-    .score
+    <label for="number">Name</label>
     <input type="text" name="name" id="name">
+    <label for="number">Score</label>
     <input type="number" name="score" id="score">
-    <button id="save">save</button>
+    <button id="save">Save</button>
+    <button id="get">Get</button>
   </div>
   <script>
-    const nameEl = document.getElementById('name').value;
-    const scoreEl = document.getElementById('score').value;
     const saveBtn = document.getElementById('save');
-
+    const getBtn = document.getElementById('get');
     saveBtn.onclick = function () {
+      const nameEl = document.getElementById('name').value;
+      const scoreEl = document.getElementById('score').value;
+      
       const score = {
         "user": nameEl,
         "score": scoreEl
       };
-
-
       const gameScores = fetch(
         'https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/RZEeQ1sUjcLkB6e2nvpj/scores/', {
           method: "POST",
@@ -36,19 +37,25 @@
         });
       
       gameScores.then(response => response.json())
-      .then(result => console.log(result))
+      .then(result => result)
     }
 
-    const myGame = {
-      name: "My awesome game",
-    };
-
-    const myNewGame = fetch('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      },
-    });
+    getBtn.onclick = function () {
+      const gameScores = fetch(
+        'https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/RZEeQ1sUjcLkB6e2nvpj/scores/', {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+          }
+        });
+      
+      gameScores.then(response => response.json())
+      .then(result => result.result.forEach(item => {
+        const pElements = document.createElement('p');
+        pElements.textContent = `The user is: ${item.user}, and The score is ${item.score}`;
+        document.body.appendChild(pElements);
+      }))
+    }
   </script>
 </body>
 
